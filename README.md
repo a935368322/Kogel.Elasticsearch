@@ -1,0 +1,1 @@
+# Kogel.Elasticsearch
