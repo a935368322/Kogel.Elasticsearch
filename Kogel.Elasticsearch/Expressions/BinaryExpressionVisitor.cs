@@ -13,9 +13,15 @@ namespace Kogel.Elasticsearch.Expressions
     /// </summary>
     public class BinaryExpressionVisitor : WhereExpressionVisitor
     {
+        EsBool _esBool;
         public BinaryExpressionVisitor(BinaryExpression expression)
         {
             EsBoolItem = new EsBoolItem();
+            _esBool = new EsBool
+            {
+                Musts = new List<EsBoolItem>(),
+                Shoulds = new List<EsBoolItem>()
+            };
             Visit(expression);
         }
 
@@ -26,28 +32,27 @@ namespace Kogel.Elasticsearch.Expressions
         /// <returns></returns>
         protected override Expression VisitBinary(BinaryExpression node)
         {
-            EsBool esBool = new EsBool();
-            var leftEsBoolItem = new EsBoolItem();
-            esBool.Musts = new List<EsBoolItem>() { leftEsBoolItem };
-            base.EsBoolItem = leftEsBoolItem;
             Visit(node.Left);
-            var expressionType = node.GetExpressionType();
-            var rightEsBoolItem = new EsBoolItem();
-            base.EsBoolItem = rightEsBoolItem;
-            if (expressionType?.Trim() == "AND")
+            var expressionType = node.GetExpressionType()?.Trim();
+
+            if (expressionType == "AND")
             {
-                esBool.Musts = new List<EsBoolItem>() { rightEsBoolItem };   
+
+
                 Visit(node.Right);
             }
-            else if (expressionType?.Trim() == "OR")
+            else if (expressionType == "OR")
             {
-                esBool.Shoulds = new List<EsBoolItem>() { rightEsBoolItem };
                 Visit(node.Right);
             }
             else
             {
-                esBool.Musts = new List<EsBoolItem>() { rightEsBoolItem };
+                if (expressionType == "=")
+                {
+                    EsBoolItem.BoolType = Entites.Es.Enum.EsBoolTypeEnum.Term;
+                }
                 Visit(node.Right);
+
             }
             return node;
         }

@@ -113,27 +113,28 @@ namespace Kogel.Elasticsearch.Expressions
         /// <returns></returns>
         protected override Expression VisitConstant(ConstantExpression node)
         {
-            if (!string.IsNullOrEmpty(EsBoolItem.FieldName))
-            {
-                EsBoolItem.FieldValue = node.ToConvertAndGetValue();
-            }
-            else
-            {
-                var nodeValue = node.ToConvertAndGetValue();
-                //switch (nodeValue)
-                //{
-                //    case true:
-                //        SpliceField.Append("1=1");
-                //        break;
-                //    case false:
-                //        SpliceField.Append("1!=1");
-                //        break;
-                //    default:
-                //        SpliceField.Append(ParamName);
-                //        Param.Add(ParamName, nodeValue);
-                //        break;
-                //}
-            }
+            EsBoolItem.FieldValue = node.ToConvertAndGetValue();
+            //if (!string.IsNullOrEmpty(EsBoolItem.FieldName))
+            //{
+            //    EsBoolItem.FieldValue = node.ToConvertAndGetValue();
+            //}
+            //else
+            //{
+            //    var nodeValue = node.ToConvertAndGetValue();
+            //    //switch (nodeValue)
+            //    //{
+            //    //    case true:
+            //    //        SpliceField.Append("1=1");
+            //    //        break;
+            //    //    case false:
+            //    //        SpliceField.Append("1!=1");
+            //    //        break;
+            //    //    default:
+            //    //        SpliceField.Append(ParamName);
+            //    //        Param.Add(ParamName, nodeValue);
+            //    //        break;
+            //    //}
+            //}
             return node;
         }
 
